@@ -66,7 +66,7 @@ export default {
       inStock: true
     };
   },
-  
+
   mounted() {
     eventBus.$on("TOGGLE_DRAWER", () => {
       console.log("toggle");
@@ -78,7 +78,9 @@ export default {
       return this.$store.getters.toys;
     },
     filters() {
-      return { categories: this.value, inStock: this.inStock };
+      return { 
+                categories: this.value, 
+                inStock: this.inStock };
     }
   },
   methods: {
@@ -97,13 +99,12 @@ export default {
       if (item.title === "Add Item") this.$router.push("/edit/");
     },
     queryDB(filters) {
-     filters = this.filters;
+      filters = this.filters;
       this.$store.dispatch({ type: "loadToys", filters });
     },
     toggleFilterDrawer() {
       this.drawer = !this.drawer;
     }
-  
   }
 };
 </script>

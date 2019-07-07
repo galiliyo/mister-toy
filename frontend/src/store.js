@@ -9,7 +9,7 @@ export default new Vuex.Store({
   state: {
     toys: [],
     filter: {
-      filterBy: "all",
+      categories: "all",
       srchStr: ""
     },
     currToy: null,
@@ -25,7 +25,6 @@ export default new Vuex.Store({
   },
   mutations: {
     setToys(state, { toys }) {
-      console.log('toys',toys)
       state.toys = toys;
     },
     setCurrToy(state, { toy }) {
@@ -43,11 +42,9 @@ export default new Vuex.Store({
     updateToy(state, { toy }) {
       const idx = state.toys.findIndex(item => item._id === toy._Id);
       state.toys.splice(idx, 1, toy);
-    },
-
-    setCurrId(state, id) {
-      state.currId = id;
     }
+
+  
   },
   actions: {
     toggleToy(context, payload) {
@@ -64,7 +61,6 @@ export default new Vuex.Store({
     },
 
     loadToys(context, { filters }) {
-      console.log('filters',filters)
       toyService.query(filters).then(toys => {
         context.commit({
           type: "setToys",
@@ -100,7 +96,6 @@ export default new Vuex.Store({
       }
     },
     setCurrToy(context, { id }) {
-      console.log("setting", id);
       return toyService.getById(id).then(toy => {
         context.commit({
           type: "setCurrToy",

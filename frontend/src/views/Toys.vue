@@ -44,10 +44,23 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <v-flex xs12 sm6 md4 lg3 v-for="(x,idx) in toys" :key="idx">
-        <toy-card :toy="x" />
+      <v-flex xs12 sm6 md4 lg3 v-for="(toy,idx) in toys" :key="idx">
+        <toy-card :toy="toy" />
       </v-flex>
     </v-layout>
+    <v-layout v-if="emptyState">
+      <v-flex>
+        <v-card class="mx-auto" max-width="500px" flat color="#fafafa">
+          <v-img src="../assets/imgs/emptyState.jpg" width="50%" class="mx-auto"></v-img>
+          <h2 class="text-xs-center">
+            Oops... nothing to show.
+            Try modifying your search or filter to find what you're looking for
+          </h2>
+          <v-card-title primary-title></v-card-title>
+        </v-card>
+      </v-flex>
+    </v-layout>
+
   </v-container>
 </template>
 
@@ -58,11 +71,9 @@ import eventBus from "../eventBus";
 const Toys = {
   data() {
     return {
-      items: [
-       
-      ],
       filters: {
-        srchStr: "",
+        srchStr: '',
+        categories: "all",
         inStock: true
       }
     };
@@ -75,6 +86,10 @@ const Toys = {
     toys() {
       var toys = this.$store.getters.toys;
       return toys;
+    },
+
+    emptyState() {
+      return this.toys.length === 0;
     }
   },
   created() {
@@ -96,3 +111,4 @@ const Toys = {
 
 export default Toys;
 </script>
+<style scoped></style>

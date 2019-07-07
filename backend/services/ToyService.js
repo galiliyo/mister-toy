@@ -15,17 +15,18 @@ var toys = readToys();
 const fs = require("fs");
 
 function query(filters) {
-    return Promise.resolve(toys);
+  
+  let srchStr = (filters.srchStr) ? filters.srchStr :''
+  let filterBy = (filters.filterBy) ? filters.filterBy :'none'
+  console.log("outside", filters.srchStr, filters.filterBy);
 
-
-  console.log("filters", filters);
-  if (filters.srchStr === "" && filters.filterBy === "none")
+  if (filters.srchStr === "" && filters.filterBy === "none") {
     return Promise.resolve(toys);
-  else {
+  } else {
     let filteredToys;
-    if (filters.srchStr) {
+    if (srchStr) {
       filteredToys = toys.filter(toy =>
-        toy.name.toLowerCase().includes(filters.srchStr.toLowerCase())
+        toy.name.toLowerCase().includes(srchStr.toLowerCase())
       );
       return Promise.resolve(filteredToys);
     }
