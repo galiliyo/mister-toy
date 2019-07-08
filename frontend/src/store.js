@@ -8,9 +8,10 @@ export default new Vuex.Store({
   strict: true,
   state: {
     toys: [],
-    filter: {
+    filters: {
       categories: "all",
-      srchStr: ""
+      srchStr: "",
+      inStock: true
     },
     currToy: null,
     user: {
@@ -42,6 +43,10 @@ export default new Vuex.Store({
     updateToy(state, { toy }) {
       const idx = state.toys.findIndex(item => item._id === toy._Id);
       state.toys.splice(idx, 1, toy);
+    },
+    setFilters(state, {filters}){
+      state.filters.categories = filters.categories
+      state.filters.inStock = filters.inStock
     }
 
   
@@ -116,6 +121,9 @@ export default new Vuex.Store({
 
     getUser(state) {
       return state.user;
+    },
+    getFilters(state) {
+      return state.filters;
     }
   }
 });

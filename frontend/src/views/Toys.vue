@@ -93,8 +93,9 @@ const Toys = {
     }
   },
   created() {
-    let nullFilters = { srchStr: "", filterBy: "none" };
-    this.$store.dispatch({ type: "loadToys", filters: nullFilters });
+    // let nullFilters = { srchStr: "", filterBy: "none" };
+    let filters = this.$store.getters.getFilters;
+    this.$store.dispatch({ type: "loadToys", filters });
   },
   methods: {
     toyClicked(toy) {

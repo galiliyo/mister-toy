@@ -15,12 +15,15 @@ var toys = readToys();
 const fs = require("fs");
 
 function query(filters) {
-  
-  let srchStr = (filters.srchStr) ? filters.srchStr :''
-  let filterBy = (filters.filterBy) ? filters.filterBy :'none'
-  console.log("outside", filters.srchStr, filters.filterBy);
 
-  if (filters.srchStr === "" && filters.filterBy === "none") {
+  let srchStr = filters.srchStr ? filters.srchStr : "";
+
+  let categories;
+  if (!filters.categories || filters.categories.length === 0)
+    categories = "all";
+  else categories = filters.categories;
+
+  if (srchStr === "" && filters.categories === "all") {
     return Promise.resolve(toys);
   } else {
     let filteredToys;
@@ -28,13 +31,12 @@ function query(filters) {
       filteredToys = toys.filter(toy =>
         toy.name.toLowerCase().includes(srchStr.toLowerCase())
       );
-      return Promise.resolve(filteredToys);
     }
-    // } else filteredToys = toys;
-    // if (filters.inStock) filteredToys = filteredToys.filter(toy => toy.inStock);
-    // if (filters.type !== "all")
-    //   filteredToys = filteredToys.filter(toy => toy.type === filters.type);
-    // return Promise.resolve(filteredToys);
+    if (categories !== "all") {
+      filteredToys = toys.filter(toy => categories.includes(toy.type));
+    }
+
+    return Promise.resolve(filteredToys);
   }
 }
 

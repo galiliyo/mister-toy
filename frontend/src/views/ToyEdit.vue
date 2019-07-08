@@ -115,7 +115,6 @@ export default {
 
   methods: {
     submit() {
-      console.log("submitting this.toy", this.toy);
       this.$validator.validateAll().then(validate => {
         var prm = this.$store.dispatch({
           type: "saveToy",

@@ -30,13 +30,13 @@
             multiple
             flat
             chips
-            deletable-chips
+            clearable
             label="Categories"
             v-model=" value"
           ></v-select>
           <v-checkbox v-model="inStock" label="In Stock"></v-checkbox>
         </v-form>
-        <v-btn color="primary" right absolute @click="queryDB">Apply</v-btn>
+        <v-btn class="mt-5" color="primary" right absolute @click="queryDB">Apply</v-btn>
       </div>
     </v-navigation-drawer>
     <v-content>
@@ -50,7 +50,6 @@ import Toys from "./views/Toys";
 import store from "./store.js";
 import Router from "./router";
 import eventBus, { TOGGLE_DRAWER } from "./eventBus.js";
-// import toyHeader from './cmps/toy-header.cmp.js'
 
 export default {
   name: "App",
@@ -69,7 +68,6 @@ export default {
 
   mounted() {
     eventBus.$on("TOGGLE_DRAWER", () => {
-      console.log("toggle");
       this.drawer = !this.drawer;
     });
   },
@@ -78,9 +76,10 @@ export default {
       return this.$store.getters.toys;
     },
     filters() {
-      return { 
-                categories: this.value, 
-                inStock: this.inStock };
+      return {
+        categories: this.value,
+        inStock: this.inStock
+      };
     }
   },
   methods: {
@@ -98,12 +97,12 @@ export default {
     clickMenu(item) {
       if (item.title === "Add Item") this.$router.push("/edit/");
     },
-    queryDB(filters) {
+    queryDB() {
+      this.drawer = false;
       filters = this.filters;
+      this.$store.commit({ type: "setFilters", filters });
+      let filters = this.$store.getters.getFilters;
       this.$store.dispatch({ type: "loadToys", filters });
-    },
-    toggleFilterDrawer() {
-      this.drawer = !this.drawer;
     }
   }
 };
