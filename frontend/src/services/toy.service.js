@@ -1,5 +1,5 @@
-import axios from "axios";
 import utilService from "./util.service.js";
+import httpService from "./http.service.js";
 
 export default {
   query,
@@ -9,30 +9,26 @@ export default {
   getById
 };
 
-const URL = "http://localhost:3000/api/toys/";
+const URL = "http://localhost:3000/api/toy/";
 
-function query(filters) {
-  return sendAxios("get", "", { params: filters });
+function query() {
+  return httpService.get(_getUrl())
 }
 function remove(toyId) {
-  return sendAxios("delete", toyId);
+  return httpService.delete(_getUrl(toyId))
 }
 function getById(toyId) {
-  return sendAxios("get", toyId);
+  return httpService.get(_getUrl(toyId))
 }
 
 function update(toy) {
-  return sendAxios("put", toy._id, toy);
-}
-function sendAxios(type, id = "", postData, url = URL) {
-  return axios[type](url + id, postData).then(res => res.data);
+  return httpService.put(_getUrl(toyId))
 }
 
 function save(toy) {
-  toy._id = utilService._makeId();
-    return sendAxios('post','',toy)
+  return httpService.post(_getUrl(), toy).then((res)=>{return res})
 }
 
-// function _getUrl(id = "") {
-//   return `http://localhost:3000/toys/${id}`;
-// }
+function _getUrl(id = '') {
+  return `toy/${id}`
+}

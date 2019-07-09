@@ -32,12 +32,15 @@ export default new Vuex.Store({
       state.currToy = toy;
     },
 
-    deleteToy(state, { toyId }) {
-      const idx = state.toys.findIndex(item => item._id === toyId);
+    deleteToy(state, { id }) {
+      const idx = state.toys.findIndex(item => item._id === id);
+      console.log('deleting in mutations',id)
       state.toys.splice(idx, 1);
     },
-    addToy(state, { toy }) {
+    addToy(state, { toy }) {  
+      console.log('toy in store',toy)
       state.toys.unshift(toy);
+      console.log('toys array',state.toys)
     },
 
     updateToy(state, { toy }) {
@@ -52,18 +55,18 @@ export default new Vuex.Store({
   
   },
   actions: {
-    toggleToy(context, payload) {
-      let prm = toyService.getById(payload.id);
-      prm.then(toy => {
-        toy.isDone = !toy.isDone;
-        toyService
-          .save(toy)
-          .then(toy =>
-            context.commit({ type: "toddgleIsDone", toyId: toy._id })
-          );
-      });
-      //   ;
-    },
+    // toggleToy(context, payload) {
+    //   let prm = toyService.getById(payload.id);
+    //   prm.then(toy => {
+    //     toy.isAvaila = !toy.isDone;
+    //     toyService
+    //       .save(toy)
+    //       .then(toy =>
+    //         context.commit({ type: "toddgleIsDone", toyId: toy._id })
+    //       );
+    //   });
+    //   //   ;
+    // },
 
     loadToys(context, { filters }) {
       toyService.query(filters).then(toys => {
@@ -74,16 +77,19 @@ export default new Vuex.Store({
       });
     },
     deleteToy(context, { id }) {
+      console.log('action delete pl:', id);
+      
       toyService.remove(id).then(() => {
         context.commit({
           type: "deleteToy",
-          id: id
+          id
         });
       });
     },
     saveToy(context, { toy }) {
       if (!toy._id) {
         return toyService.save(toy).then(addedToy => {
+          // console.log('addedToy',addedToy)
           context.commit({
             type: "addToy",
             toy: addedToy

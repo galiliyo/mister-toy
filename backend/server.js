@@ -1,13 +1,39 @@
 const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
 const app = express()
-const port = 3000
-app.use(bodyParser.json())
-app.use(cors());
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const port = process.env.PORT || 3000;
 
-const toysRoutes = require('./api/ToyRoutes')
-app.use('/api/toys',toysRoutes) 
+
+
+app.use(express.static('public'))
+app.use(bodyParser.json())
+app.use(cookieParser());
+
+app.use(session({
+    secret: 'puki muki',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        // path: '/'
+    }
+}))
+
+const cors = require('cors')
+app.use(cors({
+    origin: ['http://localhost:8080'],
+    credentials: true
+}));
+
+const toyRoute = require('./api/toy.routes');
+// const userRoute = require('./api/user.routes')
+
+app.use('/api/toy', toyRoute)
+// app.use('/api/user', userRoute)
+
+app.get('/', (req, res) => res.send('Hello World!'))
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
